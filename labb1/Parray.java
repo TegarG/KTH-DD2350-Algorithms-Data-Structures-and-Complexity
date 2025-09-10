@@ -9,7 +9,7 @@ public class Parray{
 
         Parray arr = newarray();
 
-        while (true) { 
+        while (sc.hasNextLine()) { 
             String input = sc.nextLine();
 
             if (input == null){
