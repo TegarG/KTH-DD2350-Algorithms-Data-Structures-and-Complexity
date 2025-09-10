@@ -84,12 +84,12 @@ public class Parray{
 
         // Check if index within range, i >2^31 - 1 or i is negative
         if ((i > ((1 << 31) - 1) || i < 0)){
-            return null;
+            return a;
         }
 
         // If user inputs null value, return null
         if (value == null){
-            return null;
+            return a;
         }
 
         // Create new tree root and push to version stack, return array
