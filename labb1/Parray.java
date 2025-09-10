@@ -12,6 +12,10 @@ public class Parray{
         while (true) { 
             String input = sc.nextLine();
 
+            if (input == null){
+                break;
+            }
+
             String[] inArr = input.split(" ");
 
             if (inArr.length > 3) {
