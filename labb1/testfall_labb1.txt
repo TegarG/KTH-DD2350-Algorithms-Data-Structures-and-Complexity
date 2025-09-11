@@ -1,0 +1,34 @@
+Test 1, set och get negativa index:
+set -1 10
+get -1
+get 1
+
+Test 2, allmänna set & get och unset operationer:
+set 1 40
+set 2 67
+set 3 103
+set 4 54
+set 3 87
+set 5 3
+set 4 7
+get 3
+get 4
+get 5
+unset
+get 3
+get 4
+get 5
+unset
+get 3
+get 4
+get 5
+set 5 13
+unset 
+get 3
+get 4
+get 5
+
+Test 3, unset på en tom array:
+set 2 100
+unset
+unset
