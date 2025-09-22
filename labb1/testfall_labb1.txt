@@ -3,6 +3,10 @@ set -1 10
 get -1
 get 1
 
+Förväntad output:
+0
+0
+
 Test 2, allmänna set & get och unset operationer:
 set 1 40
 set 2 67
@@ -28,7 +32,23 @@ get 3
 get 4
 get 5
 
+Förväntad output:
+87
+7
+3
+87
+54
+3
+87
+54
+0
+87
+54
+0
+
 Test 3, unset på en tom array:
 set 2 100
 unset
 unset
+
+Förvantad output:
