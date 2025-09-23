@@ -9,6 +9,10 @@ public class ClosestWords {
 
   int closestDistance = -1;
   int[][] M;
+  String previousw1 = null;
+  String previousw2 = null;
+  int maxw1 = 0;
+  int maxw2 = 0;
 
   int partDist(String w1, String w2, int w1len, int w2len) {
     if (w1len == 0)
@@ -127,13 +131,144 @@ public class ClosestWords {
           current[j] = res;
       }
 
-      // Set previous row to current, and create empty current row.
+      // Switch rows
+      int[] temp = previous;
       previous = current;
-      current = new int[n];
+      current = temp;
     }
 
     // Return min distance
     return previous[n-1];
+  }
+
+  int partDist4(String w1, String w2, int w1len, int w2len) {
+    int m = w1len + 1;
+    int n = w2len + 1;
+
+    // Keep track of previous row
+    int[] previous = new int[n];
+
+    // Base case: Set previous row to i
+    for (int i = 0; i < n; i++) {
+        previous[i] = i;
+    }
+
+    // Solve matrix row by row
+    for (int i = 1; i < m; i++) {
+        // Left diagonal cell will be previous first index
+        int diagonal  = previous[0];
+        // Left cell will be left diagonal cell incremented by one
+        int left = previous[0]++;
+        for (int j = 1; j < n; j++) {
+            int addOrDelete = Math.min(left, previous[j]) + 1;
+            int matchOrSub = diagonal + (w1.charAt(i - 1) == w2.charAt(j - 1) ? 0 : 1);
+
+            // Left cell will be current cell
+            left = Math.min(addOrDelete, matchOrSub);
+            // Left upper diagonal cell will be current top cell
+            diagonal = previous[j];
+            // Top cell will be current left cell in next iteration
+            previous[j] = left;
+        }
+    }
+    return previous[n-1];
+  }
+
+  int partDist5(String w1, String w2, int w1len, int w2len) {
+    int startIndex = 0;
+    int endIndex1 = w1len;
+    int endIndex2 = w2len;
+
+    while (startIndex < endIndex1 && startIndex < endIndex2 && w1.charAt(startIndex) == w2.charAt(startIndex)) { 
+        startIndex++;
+    }
+
+    while (startIndex < endIndex1 && startIndex < endIndex2 && w1.charAt(endIndex1-1) == w2.charAt(endIndex2-1)) { 
+        endIndex1--;
+        endIndex2--;
+    }
+
+    w1len = endIndex1 - startIndex;
+    w2len = endIndex2 - startIndex;
+
+    w1 = w1.substring(startIndex, endIndex1);
+    w2 = w2.substring(startIndex, endIndex2);
+
+    int m = w1len + 1;
+    int n = w2len + 1;
+
+    // Keep track of previous row
+    int[] previous = new int[n];
+
+    // Base case: Set previous row to i
+    for (int i = 0; i < n; i++) {
+        previous[i] = i;
+    }
+
+    // Solve matrix row by row
+    for (int i = 1; i < m; i++) {
+        // Left diagonal cell will be previous first index
+        int diagonal  = previous[0];
+        // Left cell will be left diagonal cell incremented by one
+        int left = previous[0]++;
+        for (int j = 1; j < n; j++) {
+            int addOrDelete = Math.min(left, previous[j]) + 1;
+            int matchOrSub = diagonal + (w1.charAt(i - 1) == w2.charAt(j - 1) ? 0 : 1);
+
+            // Left cell will be current cell
+            left = Math.min(addOrDelete, matchOrSub);
+            // Left upper diagonal cell will be current top cell
+            diagonal = previous[j];
+            // Top cell will be current left cell in next iteration
+            previous[j] = left;
+        }
+    }
+    return previous[n-1];
+  }
+
+  int partDist6(String w1, String w2, int w1len, int w2len) {
+    
+    // Longest common prefix index
+    int lcp = 1;
+    // If there is a previous w1 and w2
+    if(previousw1 != null && previousw2 != null && previousw1.equals(w1)){
+      int minLength = Math.min(w2len, previousw2.length());
+      for(int i = 0; i < minLength; i++){
+        if(previousw2.charAt(i) != w2.charAt(i)) break;
+        lcp++; // Count the nr of common letters
+      }
+    }
+
+    // Set new previous words
+    previousw1 = w1;
+    previousw2 = w2;
+
+    int m = w1len+1;
+    int n = w2len+1;
+
+    // Solve matrix row for row
+    for (int i = 1; i<m; i++) {
+        for (int j = lcp; j<n; j++) {
+
+          // Match or substitution
+          int res = M[i-1][j-1] + (w1.charAt(i - 1) == w2.charAt(j - 1) ? 0 : 1);
+
+          int addLetter = M[i-1][j] + 1;
+          if (res > addLetter) {
+              res = addLetter;
+          }
+          int deleteLetter = M[i][j-1] + 1;
+          if (res > deleteLetter) {
+              res = deleteLetter;
+          }
+
+          // Store the result with the least cost
+          M[i][j] = res;
+        }
+    }
+
+    // Return min distance
+    return M[m-1][n-1];
   }
 
   int distance(String w1, String w2) {
@@ -159,16 +294,38 @@ public class ClosestWords {
     /// Optimization 2: Non recursive with memoization
     // return partDist(w1, w2, w1.length(), w2.length());
 
-    /// Optimization 3: Memory efficient and less memory overhead
-    return partDist3(w1, w2, w1.length(), w2.length());
+    /// Optimization 3: Memory efficient and less memory overhead, 2 arrays
+    // return partDist3(w1, w2, w1.length(), w2.length());
+
+
+    /// Optimization 4: 1 array
+    // return partDist4(w1, w2, w1.length(), w2.length());
+
+    // return partDist5(w1, w2, w1.length(), w2.length());
+
+    return partDist6(w1, w2, w1.length(), w2.length());
 
     /// No optimization
     //return partDist(w1, w2, w1.length(), w2.length());
   }
 
   public ClosestWords(String w, List<String> wordList) {
+    // Initialize matrix M
+    int m = w.length() + 1; // Length of word 1
+    M = new int[m][29]; // The longest swedish word is 28 letters
+
+    // Base case: Set first row and col to i or j
+    for (int i = 0; i < m; i++) {
+        M[i][0] = i;
+    }
+
+    for (int j = 0; j < 29; j++) {
+        M[0][j] = j;
+    }
     for (String s : wordList) {
       int dist = distance(w, s);
+      //if (maxw1 < w.length()) maxw1 = w.length();
+      //if (maxw2 < s.length()) maxw2 = s.length();
       // System.out.println("d(" + w + "," + s + ")=" + dist);
       if (dist < closestDistance || closestDistance == -1) {
         closestDistance = dist;
@@ -178,6 +335,7 @@ public class ClosestWords {
       else if (dist == closestDistance)
         closestWords.add(s);
     }
+    //System.out.println("Word 1: " + maxw1 + ", Word 2: " + maxw2);
   }
 
   int getMinDistance() {
