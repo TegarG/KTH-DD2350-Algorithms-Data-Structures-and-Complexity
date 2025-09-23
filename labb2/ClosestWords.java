@@ -311,15 +311,21 @@ public class ClosestWords {
 
   public ClosestWords(String w, List<String> wordList) {
     // Initialize matrix M
-    int m = w.length() + 1; // Length of word 1
-    M = new int[m][29]; // The longest swedish word is 28 letters
+    int m = w.length() + 1; // Length of w1
+    int n = 0;
+    for (String s : wordList) {
+        if (n < s.length()){
+          n = s.length();
+        }
+    }
+    M = new int[m][n+1];
 
     // Base case: Set first row and col to i or j
     for (int i = 0; i < m; i++) {
         M[i][0] = i;
     }
 
-    for (int j = 0; j < 29; j++) {
+    for (int j = 0; j < n+1; j++) {
         M[0][j] = j;
     }
     for (String s : wordList) {
