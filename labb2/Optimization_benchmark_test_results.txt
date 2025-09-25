@@ -1,0 +1,26 @@
+Ingen optimering:
+Small test case; "testmedordlista" 5x average:
+(17 + 15 + 16 + 15 + 17) / 5 = 16 ms
+
+Large test case; "testmedordlista3":
+306405 ms
+
+Dynprogmatris optimering:
+Small test case; "testmedordlista" 5x average:
+(14 + 15 + 16 + 14 + 15) / 5 = 14.8 ms
+
+Large test case; "testmedordlista3" 5x average:
+(157 + 157 + 161 + 163 + 154) / 5 = 158.4 ms
+
+Large test case; "testmedordlista4" 5x average:
+(350 + 353 + 379 + 340 + 331) / 5 = 350.6 ms
+
+Dynprogmatris optimering, med matrismemorisering och prefix matchning:
+Small test case; "testmedordlista" 5x average:
+(16 + 14 + 15 + 17 + 18) / 5 = 16 ms
+
+Large test case; "testmedordlista3" 5x average:
+(77 + 78 + 76 + 79 + 78) / 5 = 77.6 ms
+
+Large test case; "testmedordlista4" 5x average:
+(99 + 101+ 96 + 97 + 97) / 5 = 98 ms
