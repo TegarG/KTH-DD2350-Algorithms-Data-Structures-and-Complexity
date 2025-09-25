@@ -292,7 +292,7 @@ public class ClosestWords {
     //return partDist1(w1, w2, w1.length(), w2.length());
 
     /// Optimization 2: Non recursive with memoization
-    // return partDist(w1, w2, w1.length(), w2.length());
+    // return partDist2(w1, w2, w1.length(), w2.length());
 
     /// Optimization 3: Memory efficient and less memory overhead, 2 arrays
     // return partDist3(w1, w2, w1.length(), w2.length());
