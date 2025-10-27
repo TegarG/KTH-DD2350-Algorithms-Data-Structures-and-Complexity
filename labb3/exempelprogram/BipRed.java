@@ -16,6 +16,7 @@ public class BipRed {
 	int[][] edges;
 
 	// Flödeslösning
+	int totflow;
 	int[][] edgeMatches;
 
     
@@ -83,7 +84,7 @@ public class BipRed {
 	int v = io.getInt();
 	int s = io.getInt();
 	int t = io.getInt();
-	int totflow = io.getInt();
+	totflow = io.getInt();
 	int e = io.getInt();
 	int foundMatches = 0;
 
@@ -102,22 +103,23 @@ public class BipRed {
 		}
 	}
 
-	for(int[] edge: edgeMatches){
-		System.out.println(edge[0] + " " + edge[1]);
-	}
+	// for(int[] edge: edgeMatches){
+	// 	System.out.println(edge[0] + " " + edge[1]);
+	// }
 
     }
     
     
     void writeBipMatchSolution() {
-	int x = 17, y = 4711, maxMatch = 0;
+	// int x = 17, y = 4711, maxMatch = 0;
+	int maxMatch = totflow;
 	
 	// Skriv ut antal hörn och storleken på matchningen
 	io.println(x + " " + y);
 	io.println(maxMatch);
 	
 	for (int i = 0; i < maxMatch; ++i) {
-	    int a = 5, b = 2323;
+	    int a = edgeMatches[i][0], b = edgeMatches[i][1];
 	    // Kant mellan a och b ingår i vår matchningslösning
 	    io.println(a + " " + b);
 	}
