@@ -7,9 +7,8 @@
  *
  * @author: Per Austrin
  */
-import java.util.Arrays;
 
-public class BipRed {
+public class Comb {
     Kattio io;
 
 	// Bipartit graf
@@ -39,16 +38,12 @@ public class BipRed {
     }
     
     
-    void writeFlowGraph() {
+    int[] writeFlowGraph() {
 	int v = x + y + 2, totalEdges = x + y + e, s = 1, t = v;
-
-	int[] flowGraph = new int[4 + 3*totalEdges];
 	
-	// Skriv ut antal hörn och kanter samt källa och sänka
-	io.println(v);
-	io.println(s + " " + t);
-	io.println(totalEdges);
+	int[] flowGraph = new int[4 + 3*totalEdges];
 
+    // Lägg in graf komponenter
 	flowGraph[0] = v;
 	flowGraph[1] = s;
 	flowGraph[2] = t;
@@ -58,59 +53,61 @@ public class BipRed {
 
 	// Kanter från s till X
 	for (int i = 1; i <= x; i++){
-		flowGraph[index++] = s;
+        flowGraph[index++] = s;
 		flowGraph[index++] = i+1;
 		flowGraph[index++] = 1;
-		io.println(s + " " + (i+1) + " 1");
 		//System.out.println(s + " " + (i+1) + " 1");
 	}
 
-	System.out.println(Arrays.toString(flowGraph));
-
 	// Kanter från X till Y
-	for (int i = 0; i < e; ++i) {
+	for (int i = 0; i < e; i++) {
 	    // int a = 1, b = 2, c = 17;
 	    // Kant från a till b med kapacitet c
 	    // io.println(a + " " + b + " " + c);
 		int a = edges[i][0] + 1;
 		int b = edges[i][1] + 1;
-		io.println(a + " " + b + " 1");
+        flowGraph[index++] = a;
+        flowGraph[index++] = b;
+        flowGraph[index++] = 1;
 		//System.out.println(a + " " + b + " 1");
 	}
 
 	// Kanter från Y till t
 	for (int i = x + 1; i <= x + y; i++){
-		io.println((i+1) + " " + t + " 1");
+        flowGraph[index++] = i+1;
+        flowGraph[index++] = t;
+        flowGraph[index++] = 1;
 		//System.out.println((i+1) + " " + t + " 1");
 	}
 
-	// Var noggrann med att flusha utdata när flödesgrafen skrivits ut!
-	io.flush();
-	
 	// Debugutskrift
 	System.err.println("Skickade iväg flödesgrafen");
+    return flowGraph;
     }
     
     
-    void readMaxFlowSolution() {
+    void readMaxFlowSolution(int[] maxFlowGraph) {
 	// Läs in antal hörn, kanter, källa, sänka, och totalt flöde
 	// (Antal hörn, källa och sänka borde vara samma som vi i grafen vi
 	// skickade iväg)
-	int v = io.getInt();
-	int s = io.getInt();
-	int t = io.getInt();
-	totflow = io.getInt();
-	int e = io.getInt();
+
+    // Hämta graf komponenter
+	int v = maxFlowGraph[0];
+	int s = maxFlowGraph[1];
+	int t = maxFlowGraph[2];
+	totflow = maxFlowGraph[3];
+	int e = maxFlowGraph[4];
 	int foundMatches = 0;
 
 	edgeMatches = new int[totflow][];
+    int index = 5;
 	
 	for (int i = 0; i < e; ++i) {
 		//if(foundMatches == totflow) break;
 	    // Flöde f från a till b
-	    int a = io.getInt();
-	    int b = io.getInt();
-	    int f = io.getInt();
+	    int a = maxFlowGraph[index++];
+	    int b = maxFlowGraph[index++];
+	    int f = maxFlowGraph[index++];
 
 		if (f == 1 && (a <= x+1 && a > s) && (b > x+1 && b < t)){
 			edgeMatches[foundMatches] = new int[]{a-1, b-1};
@@ -141,14 +138,16 @@ public class BipRed {
 	
     }
     
-    BipRed() {
+    Comb() {
 	io = new Kattio(System.in, System.out);
 	
 	readBipartiteGraph();
 	
-	writeFlowGraph();
+	int[] flowGraph = writeFlowGraph();
+
+    int[] maxFlowGraph = EdmondsKarps1.MaxFlowSolver(flowGraph);
 	
-	readMaxFlowSolution();
+	readMaxFlowSolution(maxFlowGraph);
 	
 	writeBipMatchSolution();
 
@@ -160,7 +159,7 @@ public class BipRed {
     }
     
     public static void main(String args[]) {
-	new BipRed();
+	new Comb();
     }
 }
 

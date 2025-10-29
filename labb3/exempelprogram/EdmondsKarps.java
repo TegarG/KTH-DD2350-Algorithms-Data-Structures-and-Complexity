@@ -39,7 +39,7 @@ public class EdmondsKarps{
 
         // Output
         System.out.println(V);
-        System.err.println((s+1) + " " + (t+1) + " " + maxFlow);
+        System.out.println((s+1) + " " + (t+1) + " " + maxFlow);
         
         // Samla kanter med positivt flöde
         for (ArrayList<Edge> edges : graph) {
@@ -81,7 +81,6 @@ public class EdmondsKarps{
         // 1. Hitta en kortaste flödesstig med BFS
         int maxFlow = 0;
         int V = graph.length;
-        int i = 0;
 
         while (true) { 
             Edge[] parent = new Edge[V];
@@ -119,7 +118,6 @@ public class EdmondsKarps{
             for (Edge e = parent[t]; e != null; e = parent[e.from]){
                 e.flow += bottleneck;
                 e.reverse.flow = -e.flow;
-                i++;
             }
 
             // Uppdatera maximala flödet
