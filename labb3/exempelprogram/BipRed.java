@@ -7,7 +7,6 @@
  *
  * @author: Per Austrin
  */
-import java.util.Arrays;
 
 public class BipRed {
     Kattio io;
@@ -41,31 +40,17 @@ public class BipRed {
     
     void writeFlowGraph() {
 	int v = x + y + 2, totalEdges = x + y + e, s = 1, t = v;
-
-	int[] flowGraph = new int[4 + 3*totalEdges];
 	
 	// Skriv ut antal hörn och kanter samt källa och sänka
 	io.println(v);
 	io.println(s + " " + t);
 	io.println(totalEdges);
 
-	flowGraph[0] = v;
-	flowGraph[1] = s;
-	flowGraph[2] = t;
-	flowGraph[3] = totalEdges;
-
-	int index = 4;
-
 	// Kanter från s till X
 	for (int i = 1; i <= x; i++){
-		flowGraph[index++] = s;
-		flowGraph[index++] = i+1;
-		flowGraph[index++] = 1;
 		io.println(s + " " + (i+1) + " 1");
 		//System.out.println(s + " " + (i+1) + " 1");
 	}
-
-	System.out.println(Arrays.toString(flowGraph));
 
 	// Kanter från X till Y
 	for (int i = 0; i < e; ++i) {

@@ -1,6 +1,5 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class EdmondsKarps1{
 
@@ -99,10 +98,6 @@ public class EdmondsKarps1{
         int maxFlow = edmondsKarps(graph, s, t);
 
         ArrayList<Edge> posEdges= new ArrayList<>();
-
-        // Output
-        System.out.println(V);
-        System.out.println((s+1) + " " + (t+1) + " " + maxFlow);
         
         // Samla kanter med positivt flöde
         for (ArrayList<Edge> edges : graph) {
@@ -114,10 +109,9 @@ public class EdmondsKarps1{
             }
         }
 
-        // Antalet kanter med positivt flöde
-        System.out.println(posEdges.size());
         int[] maxFlowGraph = new int[5 + (3 * posEdges.size())];
 
+        // Samla värden för max flödesgrafen
         maxFlowGraph[0] = V;
         maxFlowGraph[1] = s+1;
         maxFlowGraph[2] = t+1;
@@ -125,19 +119,13 @@ public class EdmondsKarps1{
         maxFlowGraph[4] = posEdges.size();
 
         int i = 5;
-        // Skriv ut kanter
+        // Lägg in kanter med positivt flöde
         for (Edge edge: posEdges){
             maxFlowGraph[i++] = edge.from + 1;
             maxFlowGraph[i++] = edge.to + 1;
             maxFlowGraph[i++] = edge.flow;
-            System.out.println((edge.from + 1)+ " " + (edge.to + 1) + " " + edge.flow);
         }
 
         return maxFlowGraph;
-    }
-    public static void main(String[] args) {
-        int[] example = new int[]{4, 1, 4, 5, 1, 2, 1, 1, 3, 2, 2, 4, 2, 3, 2, 2, 3, 4, 1};
-        int [] sol = MaxFlowSolver(example);
-        System.out.println(Arrays.toString(sol));
     }
 }
