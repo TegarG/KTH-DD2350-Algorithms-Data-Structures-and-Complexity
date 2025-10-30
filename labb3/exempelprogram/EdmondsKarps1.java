@@ -14,6 +14,7 @@ public class EdmondsKarps1{
             this.flow = 0;
         }
 
+        // Hämta kantens residual kapacitet
         public int getResidual(){
             return this.cap - this.flow;
         }
@@ -21,19 +22,22 @@ public class EdmondsKarps1{
 
     static int edmondsKarps(ArrayList<Edge>[] graph, int s, int t){
         // 1. Hitta en kortaste flödesstig med BFS
-        int maxFlow = 0;
+        int maxFlow = 0; // Maximala flödet
         int V = graph.length;
 
         while (true) { 
             Edge[] parent = new Edge[V];
             ArrayDeque<Integer> queue = new ArrayDeque<>();
+            // Börja från s
             queue.add(s);
 
+            // Fortsätt bfs tills vi har nått t eller alla noder är besökta
             while (!queue.isEmpty() && parent[t] == null) { 
+                // Hämta aktuell nod
                 int currentNode = queue.poll();
                 for (Edge edge: graph[currentNode]){
-                    // If node not traversed and we can push flow
-                    // Do not go back to source
+                    // Om noden är inte besökt än, samt att vi kan vi kan trycka flöde
+                    // Gå även inte tillbaka till s
                     if (parent[edge.to] == null && edge.to != s && edge.getResidual() > 0){
                         // Add parent edge
                         parent[edge.to] = edge;
@@ -45,9 +49,6 @@ public class EdmondsKarps1{
 
             // No more paths to sink, exit search
             if (parent[t] == null) break;
-
-            // While queue is empty and we have not found t
-            // If capacity - flow > 0, traversera nod
 
             // 2. Hitta bottleneck för stigen
             int bottleneck = Integer.MAX_VALUE;
@@ -68,17 +69,20 @@ public class EdmondsKarps1{
         return maxFlow;
     }
     static int[] MaxFlowSolver(int[] flowGraph){
+        // Hämta graf
         int V = flowGraph[0];
         int s = flowGraph[1] - 1;
         int t = flowGraph[2] - 1;
         int E = flowGraph[3];
 
+        // Skapa graf med grannlistor
         @SuppressWarnings("unchecked")
         ArrayList<Edge>[] graph = (ArrayList<Edge>[]) new ArrayList[V];
         for (int i = 0; i < graph.length; i++) {
             graph[i] = new ArrayList<>();
         }
 
+        // Lagra alla kanter och bakåt kanter
         for (int i = 4; i < flowGraph.length; i = i + 3){
             int a = flowGraph[i] - 1;
             int b = flowGraph[i+1] - 1;
@@ -95,8 +99,10 @@ public class EdmondsKarps1{
             graph[b].add(reverse);
         }
 
+        // Hitta maximala flöde med edmonds karps
         int maxFlow = edmondsKarps(graph, s, t);
 
+        // Lista med alla kanter med positivt flöde
         ArrayList<Edge> posEdges= new ArrayList<>();
         
         // Samla kanter med positivt flöde
@@ -109,6 +115,7 @@ public class EdmondsKarps1{
             }
         }
 
+        // Max flödesgrafen
         int[] maxFlowGraph = new int[5 + (3 * posEdges.size())];
 
         // Samla värden för max flödesgrafen
@@ -118,6 +125,7 @@ public class EdmondsKarps1{
         maxFlowGraph[3] = maxFlow;
         maxFlowGraph[4] = posEdges.size();
 
+        // Starta från index 5
         int i = 5;
         // Lägg in kanter med positivt flöde
         for (Edge edge: posEdges){
