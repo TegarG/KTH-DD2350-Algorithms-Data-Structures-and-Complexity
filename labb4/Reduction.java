@@ -21,19 +21,19 @@ public class Reduction {
         // Resterande rader är varje kant (E st) från 1 till V
         // Läs in alla kanter 
         for (int i = 0; i < E; i++) {
-	    int a = sc.nextInt();
-	    int b = sc.nextInt();
-		edges[i][0] = a;
-	    edges[i][1] = b;
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            edges[i][0] = a;
+            edges[i][1] = b;
         }
 
         // Gör om problemet till rollbesättning
         // Roller r1, r2, ... rn
-        int n = V;
+        int n = V + 3;
         System.out.println(n);
 
         // Scener 
-        int s = E; 
+        int s = E + 2; 
         System.out.println(s);
 
         // Skådespelare p1, p2, ... pk
@@ -41,12 +41,8 @@ public class Reduction {
         System.out.println(k);
 
         // Roller 
-        // p1 och p2 får varsin roll
-        System.out.println("1 1");
-        System.out.println("1 2");
-
-        // Resterande roller kan besättas av alla
-        for (int i = 2; i < V; i++){
+        // En för varje nod
+        for (int i = 0; i < V; i++){
             System.out.print(M);
             for(int j = 1; j <= M; j++){
                 System.out.print(" " + j);
@@ -54,16 +50,32 @@ public class Reduction {
             System.out.println();
         }
 
-        // Scener
-        // scen 1 spelas av p1 och p3
-        System.out.println("2 1 3");
-        // scen 2 spelas av p2 och p3 
-        System.out.println("2 2 3");
+        // p1 och p2 får varsin roll
+        System.out.println("1 1");
+        System.out.println("1 2");
+        
+        // Hjälp roll för scener med p1 och p2... 
+        // ...kan besättas av alla förutom p1 och p2
+        if(M > 2){
+            System.out.print((M - 2));
+            for(int i = 3; i <= M; i++){
+                System.out.print(" " + i);
+            }
+            System.out.println();
+        } else {
+            System.out.println("1 1");
+        }
 
-        // Resterande scener medverkas av
-        for(int i = 2; i < s; i++){
+        // Scener
+        // Alla scener medverkas av
+        for(int i = 0; i < E; i++){
             System.out.println("2 " + edges[i][0] + " " + edges[i][1]);
         }
+
+        // scen 1 spelas av p1 och p3
+        System.out.println("2 " + (V + 1) + " " + (V + 3));
+        // scen 2 spelas av p2 och p3 
+        System.out.println("2 " + (V + 2) + " " + (V + 3));
 
         sc.close();
     }
